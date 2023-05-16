@@ -9,6 +9,8 @@ pub fn contains_duplicate(nums: Vec<i32>) -> bool {
    return false
 }
 
+//can be O(1) space complexity if you compare two sorted arrays, but slower
+//this solution is O(n) time and space
 pub fn is_anagram(s: String, t: String) -> bool {
     if s.len() != t.len() { return false};
 
@@ -24,3 +26,18 @@ pub fn is_anagram(s: String, t: String) -> bool {
     s_hash == t_hash
 }
 
+pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    let mut hash: HashMap<i32, i32> = HashMap::new();
+    
+    for (index, &value) in nums.iter().enumerate() {
+        hash.entry(value).or_insert(index as i32);
+        let pair = hash.get(&(target - value));
+        if let Some(value) = pair {
+            if index as i32 != *value {
+                return vec![index as i32, *value]
+            } 
+        }
+    };
+
+    return vec![]
+}
