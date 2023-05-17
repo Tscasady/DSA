@@ -6,12 +6,12 @@ fn main() {
     assert!(arrays_and_hashing::contains_duplicate(numbers));
     assert!(!arrays_and_hashing::contains_duplicate(numbers2));
 
-    let word = "anagram".to_string();
-    let word2 = "naamarg".to_string();
+    let word = "anagram";
+    let word2 = "naamarg";
     assert!(arrays_and_hashing::is_anagram(word, word2));
 
-    let word = "word".to_string();
-    let word2 = "this".to_string();
+    let word = "word";
+    let word2 = "this";
     assert!(!arrays_and_hashing::is_anagram(word, word2));
 
     println!("Success!");

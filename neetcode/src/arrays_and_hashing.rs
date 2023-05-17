@@ -13,7 +13,7 @@ pub fn contains_duplicate(nums: Vec<i32>) -> bool {
 
 //can be O(1) space complexity if you compare two sorted arrays, but slower
 //this solution is O(n) time and space
-pub fn is_anagram(s: String, t: String) -> bool {
+pub fn is_anagram(s: &str, t: &str) -> bool {
     if s.len() != t.len() {
         return false;
     };
@@ -34,6 +34,17 @@ pub fn is_anagram(s: String, t: String) -> bool {
             .or_insert(1);
     }
     s_hash == t_hash
+}
+
+pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+    let mut anagrams: HashMap<String, Vec<String>> = HashMap::new(); 
+    for word in strs {
+        let mut chars: Vec<char> = word.chars().collect();
+        chars.sort();
+        let anagram: String = chars.iter().collect();
+        anagrams.entry(anagram).and_modify(|vec| vec.push(word.to_owned())).or_insert(vec![word]);
+    }
+    anagrams.values().cloned().collect()
 }
 
 pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
