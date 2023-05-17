@@ -17,5 +17,11 @@ fn main() {
     println!("Success!");
     
     let nums = vec![2,7,11,15];
-    assert_eq!(arrays_and_hashing::two_sum(nums, 9), [1, 0])
+    assert_eq!(arrays_and_hashing::two_sum(nums, 9), [1, 0]);
+
+    let not_palin = "0P".to_string();
+    assert!(!arrays_and_hashing::is_palindrome(not_palin));
+
+    let palin = "dad".to_string();
+    assert!(arrays_and_hashing::is_palindrome(palin))
 }
