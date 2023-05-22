@@ -37,12 +37,15 @@ pub fn is_anagram(s: &str, t: &str) -> bool {
 }
 
 pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
-    let mut anagrams: HashMap<String, Vec<String>> = HashMap::new(); 
+    let mut anagrams: HashMap<String, Vec<String>> = HashMap::new();
     for word in strs {
         let mut chars: Vec<char> = word.chars().collect();
         chars.sort();
         let anagram: String = chars.iter().collect();
-        anagrams.entry(anagram).and_modify(|vec| vec.push(word.to_owned())).or_insert(vec![word]);
+        anagrams
+            .entry(anagram)
+            .and_modify(|vec| vec.push(word.to_owned()))
+            .or_insert(vec![word]);
     }
     anagrams.values().cloned().collect()
 }
@@ -80,4 +83,53 @@ pub fn is_palindrome(s: String) -> bool {
         }
     }
     return true;
+}
+
+pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
+    let mut hash = HashMap::new();
+    let mut solution = Vec::new();
+    for num in nums {
+        hash.entry(num).and_modify(|count| *count += 1).or_insert(1);
+    }
+
+    while (solution.len() as i32) < k {
+        let max_entry = hash
+            .iter()
+            .max_by_key(|&(_, value)| value)
+            .map(|(&key, &value)| (key, value));
+        if let Some((max_key, _)) = max_entry {
+            solution.push(max_key);
+            hash.remove(&max_key);
+        }
+    }
+
+    return solution;
+}
+
+pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+    let last_index = nums.len() - 1;
+    let mut result: Vec<i32> = Vec::with_capacity(nums.len());
+
+    for (index, num) in nums.iter().enumerate() {
+        let prefix_product = match index {
+            0 => Some(&1),
+            _ => result.get(index - 1),
+        };
+
+        let prev_num = if index == 0 {1} else {nums[index - 1]};
+
+        result.push(prev_num * prefix_product.unwrap())
+    }
+
+    let mut postfix_product = 1;
+    for (index, num) in nums.iter().enumerate() {
+        let post_index = nums.len() - 1 - index;
+
+        if post_index != last_index {
+            postfix_product *= nums[post_index + 1]
+        };
+
+        result[post_index] = result[post_index] * postfix_product
+    }
+    return result;
 }

@@ -14,8 +14,7 @@ fn main() {
     let word2 = "this";
     assert!(!arrays_and_hashing::is_anagram(word, word2));
 
-    println!("Success!");
-    
+
     let nums = vec![2,7,11,15];
     assert_eq!(arrays_and_hashing::two_sum(nums, 9), [1, 0]);
 
@@ -23,5 +22,13 @@ fn main() {
     assert!(!arrays_and_hashing::is_palindrome(not_palin));
 
     let palin = "dad".to_string();
-    assert!(arrays_and_hashing::is_palindrome(palin))
+    assert!(arrays_and_hashing::is_palindrome(palin));
+
+    let nums = vec![1, 1, 1, 2, 2, 3, 4];
+    assert_eq!(arrays_and_hashing::top_k_frequent(nums, 2), [1, 2]);
+
+    let nums = vec![1, 2, 3 ,4];
+    assert_eq!(arrays_and_hashing::product_except_self(nums), vec![24, 12, 8, 6]);
+
+    println!("Success!");
 }
