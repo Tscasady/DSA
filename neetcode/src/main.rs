@@ -1,4 +1,5 @@
 mod arrays_and_hashing;
+mod stack;
 
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];
@@ -30,5 +31,9 @@ fn main() {
     let nums = vec![1, 2, 3 ,4];
     assert_eq!(arrays_and_hashing::product_except_self(nums), vec![24, 12, 8, 6]);
 
+    // let test = String::from("()[{}]");
+    let test2 = String::from("(])");
+    // assert!(stack::is_valid(test));
+    assert!(!stack::is_valid(test2));
     println!("Success!");
 }
