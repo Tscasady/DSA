@@ -29,3 +29,38 @@ pub fn is_valid(s: String) -> bool {
     }
     return stack.len() == 0;
 }
+
+struct MinStack {
+    stack: Vec<(i32, i32)>
+}
+
+impl MinStack {
+
+    fn new() -> Self {
+        return MinStack {
+            stack: Vec::new()
+        }
+    }
+    
+    fn push(&mut self, val: i32) {
+        if self.stack.len() == 0 {
+            self.stack.push((val, val))        
+        } else if self.stack.last().unwrap().1 > val {
+            self.stack.push((val, val))
+        } else {
+            self.stack.push((val, self.stack.last().unwrap().1))
+        }
+    }
+    
+    fn pop(&mut self) {
+        self.stack.pop();
+    }
+    
+    fn top(&self) -> i32 {
+        self.stack.last().unwrap().1       
+    }
+    
+    fn get_min(&self) -> i32 {
+        self.stack.last().unwrap().1                
+    }
+}
