@@ -64,3 +64,27 @@ impl MinStack {
         self.stack.last().unwrap().1                
     }
 }
+
+pub fn eval_rpn(tokens: Vec<String>) -> i32 {
+    let mut stack = Vec::new();
+
+    for token in tokens {
+        match token.as_str() {
+            "*" => { let a = stack.pop().unwrap();
+                let b = stack.pop().unwrap();
+                stack.push(a * b)},
+            "/" => { let a = stack.pop().unwrap();
+                let b = stack.pop().unwrap();
+                stack.push(a / b)},
+            "+" => { let a = stack.pop().unwrap();
+                let b = stack.pop().unwrap();
+                stack.push(a + b)},
+            "-" => { let a = stack.pop().unwrap();
+                let b = stack.pop().unwrap();
+                stack.push(a - b)},
+            _ => stack.push(token.parse::<i32>().unwrap())
+        }
+    }
+
+    return stack.pop().unwrap()
+}

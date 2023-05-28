@@ -35,5 +35,8 @@ fn main() {
     let test2 = String::from("(])");
     assert!(stack::is_valid(test));
     assert!(!stack::is_valid(test2));
-    println!("Success!");
+
+    let tokens = vec!["3".to_string(), "4".to_string(), "+".to_string()];
+        assert_eq!(stack::eval_rpn(tokens), 7);
+        println!("Success!");
 }
