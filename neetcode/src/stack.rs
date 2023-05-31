@@ -88,3 +88,30 @@ pub fn eval_rpn(tokens: Vec<String>) -> i32 {
 
     return stack.pop().unwrap()
 }
+
+pub fn generate_parenthesis(n: i32) -> Vec<String> {
+    let mut stack = Vec::new();
+    let mut result = Vec::new();
+
+    build_solution(n, &mut stack, &mut result, 0, 0);
+    
+    result
+}
+
+fn build_solution(n:i32, stack: &mut Vec<&str>, result: &mut Vec<String>, open: i32, closed: i32) {
+    if open == n && closed == n {
+        result.push(stack.join(""));
+    };
+
+    if closed < open {
+        stack.push(")");
+        build_solution(n, stack, result, open, closed + 1);
+        stack.pop();
+    };
+
+    if open < n {
+        stack.push("(");
+        build_solution(n, stack, result, open + 1, closed);
+        stack.pop();
+    };
+}

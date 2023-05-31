@@ -37,6 +37,9 @@ fn main() {
     assert!(!stack::is_valid(test2));
 
     let tokens = vec!["3".to_string(), "4".to_string(), "+".to_string()];
-        assert_eq!(stack::eval_rpn(tokens), 7);
-        println!("Success!");
+    assert_eq!(stack::eval_rpn(tokens), 7);
+    
+    let parens = vec!["()()", "(())"];
+    assert_eq!(stack::generate_parenthesis(2), parens);
+    println!("Success!")
 }
