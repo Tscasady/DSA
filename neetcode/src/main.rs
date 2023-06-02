@@ -1,5 +1,6 @@
 mod arrays_and_hashing;
 mod stack;
+mod binary_search;
 
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];
@@ -44,5 +45,8 @@ fn main() {
 
     let nums = vec![73,74,75,71,69,72,76,73];
     assert_eq!(stack::daily_temperature(nums), vec![1, 1, 4, 2, 1, 1, 0, 0]);
+
+    let nums = vec![1, 2, 3, 4, 5, 6, 7, 8];
+    assert_eq!(binary_search::binary_search(nums, 6), 5);
     println!("Success!")
 }
