@@ -41,5 +41,8 @@ fn main() {
     
     let parens = vec!["()()", "(())"];
     assert_eq!(stack::generate_parenthesis(2), parens);
+
+    let nums = vec![73,74,75,71,69,72,76,73];
+    assert_eq!(stack::daily_temperature(nums), vec![1, 1, 4, 2, 1, 1, 0, 0]);
     println!("Success!")
 }

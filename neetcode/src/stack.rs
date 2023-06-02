@@ -115,3 +115,24 @@ fn build_solution(n:i32, stack: &mut Vec<&str>, result: &mut Vec<String>, open: 
         stack.pop();
     };
 }
+
+pub fn daily_temperature(temperatures: Vec<i32>) -> Vec<i32> {
+    let mut result = vec![0; temperatures.len()];
+    let mut stack = Vec::with_capacity(temperatures.len());
+    for (index, curr_value) in temperatures.iter().enumerate() {
+        loop {
+            match stack.last() {
+                Some((stack_index, stack_value)) => {
+                    if curr_value > stack_value {
+                        result[*stack_index] = (index - stack_index) as i32;
+                        stack.pop();
+                    } else {
+                        stack.push((index, *curr_value)); break
+                    }
+                },
+                None => { stack.push((index, *curr_value)); break }
+            }
+        }
+    }
+    result
+}
