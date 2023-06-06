@@ -1,6 +1,7 @@
 mod arrays_and_hashing;
 mod stack;
 mod binary_search;
+mod two_pointer;
 
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];
@@ -21,10 +22,10 @@ fn main() {
     assert_eq!(arrays_and_hashing::two_sum(nums, 9), [1, 0]);
 
     let not_palin = "0P".to_string();
-    assert!(!arrays_and_hashing::is_palindrome(not_palin));
+    assert!(!two_pointer::is_palindrome(not_palin));
 
     let palin = "dad".to_string();
-    assert!(arrays_and_hashing::is_palindrome(palin));
+    assert!(two_pointer::is_palindrome(palin));
 
     let nums = vec![1, 1, 1, 2, 2, 3, 4];
     assert_eq!(arrays_and_hashing::top_k_frequent(nums, 2), [1, 2]);
@@ -63,5 +64,8 @@ fn main() {
     let nums = vec![0,3,7,2,5,8,4,6,0,1];
     // let nums = vec![100, 4, 200, 1, 2, 3];
     assert_eq!(arrays_and_hashing::longest_consecutive(nums), 9);
+
+    let nums = vec![2,3,4];
+    assert_eq!(two_pointer::two_sum(nums, 6), vec![1, 3]);
     println!("Success!")
 }

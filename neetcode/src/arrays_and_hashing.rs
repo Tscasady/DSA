@@ -67,25 +67,6 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     return vec![];
 }
 
-pub fn is_palindrome(s: String) -> bool {
-    let sanitized_string: Vec<char> = s
-        .to_lowercase()
-        .chars()
-        .filter(|char| char.is_alphanumeric())
-        .collect();
-    for (index, &char) in sanitized_string
-        .iter()
-        .enumerate()
-        .take(sanitized_string.len() / 2)
-    {
-        let reversed_index = sanitized_string.len() - index - 1;
-        if char != sanitized_string[reversed_index] {
-            return false;
-        }
-    }
-    return true;
-}
-
 pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
     let mut hash = HashMap::new();
     let mut solution = Vec::new();
@@ -172,8 +153,8 @@ pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
     }
 
     for num in &nums {
-        if !hash.contains(&(num - 1)) { continue };
         let mut count = 1;
+        if !hash.contains(&(num - 1)) { continue };
         count = recursive_sequencer(&num, count, &hash);
         if count > max {
             max = count
@@ -189,4 +170,3 @@ fn recursive_sequencer(num: &i32, mut count: i32, hash: &HashSet<&i32>) -> i32 {
     } 
     count
 }
-
