@@ -5,8 +5,8 @@ mod binary_search;
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];
     let numbers2 = vec![1, 2, 3, 4, 5];
-    assert!(arrays_and_hashing::contains_duplicate(numbers));
-    assert!(!arrays_and_hashing::contains_duplicate(numbers2));
+    assert!(arrays_and_hashing::contains_duplicate(&numbers));
+    assert!(!arrays_and_hashing::contains_duplicate(&numbers2));
 
     let word = "anagram";
     let word2 = "naamarg";
@@ -48,5 +48,16 @@ fn main() {
 
     let nums = vec![1, 2, 3, 4, 5, 6, 7, 8];
     assert_eq!(binary_search::binary_search(nums, 6), 5);
+
+    let board: Vec<Vec<char>> = vec![vec!['5','3','.','.','7','.','.','.','.']
+,vec!['6','.','.','1','9','5','.','.','.']
+,vec!['.','9','8','.','.','.','.','6','.']
+,vec!['8','.','.','.','6','.','.','.','3']
+,vec!['4','.','.','8','.','3','.','.','1']
+,vec!['7','.','.','.','2','.','.','.','6']
+,vec!['.','6','.','.','.','.','2','8','.']
+,vec!['.','.','.','4','1','9','.','.','5']
+,vec!['.','.','.','.','8','.','.','7','9']];
+    assert!(arrays_and_hashing::is_valid_sudoku(board));
     println!("Success!")
 }

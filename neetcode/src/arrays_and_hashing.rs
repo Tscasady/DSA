@@ -1,6 +1,7 @@
 use std::collections::HashMap;
+use std::hash::Hash;
 
-pub fn contains_duplicate(nums: Vec<i32>) -> bool {
+pub fn contains_duplicate<T: Eq + Hash>(nums: &Vec<T>) -> bool {
     let mut hash = HashMap::new();
     for num in nums {
         let entry = hash.entry(num).and_modify(|count| *count += 1).or_insert(1);
@@ -133,3 +134,22 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
     }
     return result;
 }
+
+pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
+    board.iter().enumerate().all(|(index, row)| contains_duplicate(row) || check_column(&board, index) || check_box(board, index))
+}
+
+fn check_column(board: &Vec<Vec<char>>, index: usize) -> bool {
+    let column: Vec<char> = board.iter().map(|row| row[index]).collect();
+    contains_duplicate(&column)
+
+}
+
+fn check_box(board: Vec<Vec<char>>, row_index: usize) -> bool {
+    let box_index = (row_index / 3) * 3;
+    let rows = board[box_index..box_index+3].to_vec(); 
+    let column_index = (row_index % 3) * 3;
+    let sudoku_box: Vec<Vec<char>> = rows.iter().map(|row| row[column_index..column_index+3].to_vec()).collect();
+    contains_duplicate(&sudoku_box.concat())
+}
+
