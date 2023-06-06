@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 
 pub fn contains_duplicate<T: Eq + Hash>(nums: &Vec<T>) -> bool {
@@ -149,7 +149,6 @@ fn check_box(board: &Vec<Vec<char>>, row_index: usize) -> bool {
     let rows = board[box_index..box_index+3].to_vec(); 
     let column_index = (row_index % 3) * 3;
     let sudoku_box: Vec<Vec<char>> = rows.iter().map(|row| row[column_index..column_index+3].to_vec()).collect();
-    println!("{:?}", sudoku_box);
     !dup_check(&sudoku_box.concat())
 }
 
@@ -163,5 +162,31 @@ fn dup_check(collection: &Vec<char>) -> bool {
         }
     }
     return false;
+}
+
+pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
+    let mut max = 0;
+    let mut hash = HashSet::new();
+    for num in &nums {
+        hash.insert(num);
+    }
+
+    for num in &nums {
+        if !hash.contains(&(num - 1)) { continue };
+        let mut count = 1;
+        count = recursive_sequencer(&num, count, &hash);
+        if count > max {
+            max = count
+        }
+    }
+    max
+}
+
+fn recursive_sequencer(num: &i32, mut count: i32, hash: &HashSet<&i32>) -> i32 {
+    if hash.contains(num) {
+        count += 1;
+        return recursive_sequencer(&(num + 1), count, hash)
+    } 
+    count
 }
 
