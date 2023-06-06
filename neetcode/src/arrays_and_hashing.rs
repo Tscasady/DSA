@@ -136,20 +136,32 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
 }
 
 pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
-    board.iter().enumerate().all(|(index, row)| contains_duplicate(row) || check_column(&board, index) || check_box(board, index))
+    board.iter().enumerate().all(|(index, row)| !dup_check(row) && check_column(&board, index) && check_box(&board, index))
 }
 
 fn check_column(board: &Vec<Vec<char>>, index: usize) -> bool {
     let column: Vec<char> = board.iter().map(|row| row[index]).collect();
-    contains_duplicate(&column)
-
+    !dup_check(&column)
 }
 
-fn check_box(board: Vec<Vec<char>>, row_index: usize) -> bool {
+fn check_box(board: &Vec<Vec<char>>, row_index: usize) -> bool {
     let box_index = (row_index / 3) * 3;
     let rows = board[box_index..box_index+3].to_vec(); 
     let column_index = (row_index % 3) * 3;
     let sudoku_box: Vec<Vec<char>> = rows.iter().map(|row| row[column_index..column_index+3].to_vec()).collect();
-    contains_duplicate(&sudoku_box.concat())
+    println!("{:?}", sudoku_box);
+    !dup_check(&sudoku_box.concat())
+}
+
+fn dup_check(collection: &Vec<char>) -> bool {
+    let mut hash = HashMap::new();
+    for char in collection {
+        if *char == '.' { continue };
+        let entry = hash.entry(char).and_modify(|count| *count += 1).or_insert(1);
+        if *entry > 1 {
+            return true;
+        }
+    }
+    return false;
 }
 
