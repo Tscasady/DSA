@@ -71,13 +71,13 @@ mod tests {
 
     #[test]
     fn three_sum_test() {
-        let mut nums = vec![-1,0,1,2,-1,-4];
+        let nums = vec![-1,0,1,2,-1,-4];
         assert_eq!(three_sum(nums), vec![vec![-1, -1, 2], vec![-1, 0, 1]]);
     }
 
     #[test]
     fn three_sum_zero_test() {
-        let mut nums = vec![0, 0, 0, 0];
+        let nums = vec![0, 0, 0, 0];
         assert_eq!(three_sum(nums), vec![vec![0, 0, 0]]);
     }
 }
