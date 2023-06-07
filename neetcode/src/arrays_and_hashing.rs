@@ -37,6 +37,7 @@ pub fn is_anagram(s: &str, t: &str) -> bool {
     s_hash == t_hash
 }
 
+#[allow(dead_code)]
 pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
     let mut anagrams: HashMap<String, Vec<String>> = HashMap::new();
     for word in strs {
@@ -92,7 +93,7 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
     let last_index = nums.len() - 1;
     let mut result: Vec<i32> = Vec::with_capacity(nums.len());
 
-    for (index, num) in nums.iter().enumerate() {
+    for (index, _) in nums.iter().enumerate() {
         let prefix_product = match index {
             0 => Some(&1),
             _ => result.get(index - 1),
@@ -104,7 +105,7 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
     }
 
     let mut postfix_product = 1;
-    for (index, num) in nums.iter().enumerate() {
+    for (index, _) in nums.iter().enumerate() {
         let post_index = nums.len() - 1 - index;
 
         if post_index != last_index {

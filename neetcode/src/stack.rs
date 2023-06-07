@@ -30,10 +30,12 @@ pub fn is_valid(s: String) -> bool {
     return stack.len() == 0;
 }
 
+#[allow(dead_code)]
 struct MinStack {
     stack: Vec<(i32, i32)>
 }
 
+#[allow(dead_code)]
 impl MinStack {
 
     fn new() -> Self {

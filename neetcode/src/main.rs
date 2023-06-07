@@ -69,3 +69,6 @@ fn main() {
     assert_eq!(two_pointer::two_sum(nums, 6), vec![1, 3]);
     println!("Success!")
 }
+
+// you can sort the array
+
