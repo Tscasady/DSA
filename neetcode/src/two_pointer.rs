@@ -1,3 +1,4 @@
+
 pub fn is_palindrome(s: String) -> bool {
     let sanitized_string: Vec<char> = s
         .to_lowercase()
@@ -59,6 +60,24 @@ pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
     }
     result
 }
+
+pub fn most_water(nums: Vec<i32>) -> i32 {
+    let mut left = 0;
+    let mut right = nums.len() - 1;
+    let mut max_area = 0;
+    while left < right {
+        let min_height = std::cmp::min(nums[left], nums[right]);
+        let area = (right - left) as i32 * min_height;
+        max_area = std::cmp::max(area, max_area);
+        if nums[left] < nums[right] {
+            left += 1;                            
+        } else {
+            right -= 1;
+        }
+    }
+    return max_area;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -80,4 +99,11 @@ mod tests {
         let nums = vec![0, 0, 0, 0];
         assert_eq!(three_sum(nums), vec![vec![0, 0, 0]]);
     }
+
+    #[test]
+    fn most_water_test() {
+        let nums = vec![1,8,6,2,5,4,8,3,7];
+        assert_eq!(most_water(nums), 49) 
+    }
 }
+
