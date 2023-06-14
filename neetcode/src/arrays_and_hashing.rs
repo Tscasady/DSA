@@ -1,10 +1,10 @@
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 
-pub fn contains_duplicate<T: Eq + Hash>(nums: &Vec<T>) -> bool {
+pub fn contains_duplicate<T: Eq + Hash>(collection: &Vec<T>) -> bool {
     let mut hash = HashMap::new();
-    for num in nums {
-        let entry = hash.entry(num).and_modify(|count| *count += 1).or_insert(1);
+    for item in collection {
+        let entry = hash.entry(item).and_modify(|count| *count += 1).or_insert(1);
         if *entry > 1 {
             return true;
         }
@@ -170,4 +170,14 @@ fn recursive_sequencer(num: &i32, mut count: i32, hash: &HashSet<&i32>) -> i32 {
         return recursive_sequencer(&(num + 1), count, hash)
     } 
     count
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[test]
+    fn duplicate_test(){
+
+    }
 }
