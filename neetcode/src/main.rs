@@ -2,6 +2,7 @@ mod arrays_and_hashing;
 mod stack;
 mod binary_search;
 mod two_pointer;
+mod linked_list;
 
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];
