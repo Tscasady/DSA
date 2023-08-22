@@ -1,4 +1,3 @@
-
 pub fn binary_search(nums: &Vec<i32>, target: i32) -> i32 {
     let mut low = 0;  
     let mut high = nums.len() as i32 - 1;
@@ -89,6 +88,20 @@ pub fn div_ceil(divd: &i32, div: i32) -> i64 {
     return solution.into()
 }
 
+pub fn find_min(nums: Vec<i32>) -> i32 {
+    let mut left = 0;    
+    let mut right = nums.len() - 1;
+    while left <= right {
+        let mid = (right + left) / 2;
+        if nums[mid] < nums[right] {
+            right = mid
+        } else {
+            left = mid + 1
+        }
+    }
+    return nums[right]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -138,6 +151,11 @@ mod tests {
     fn koko_three() {
         let piles = vec![805306368,805306368,805306368];
         assert_eq!(3, min_eating_speed(piles, 1000000000))
+    }
+    #[test]
+    fn rotated_test() {
+        let nums = vec![4, 5, 1, 2, 3];
+        assert_eq!(1, find_min(nums))
     }
 
 }
