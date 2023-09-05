@@ -3,6 +3,7 @@ mod stack;
 mod binary_search;
 mod two_pointer;
 mod linked_list;
+mod sliding_window;
 
 fn main() {
     let numbers = vec![1, 2, 3, 4, 2];

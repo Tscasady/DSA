@@ -1,19 +1,18 @@
 pub fn binary_search(nums: &Vec<i32>, target: i32) -> i32 {
-    let mut low = 0;  
+    let mut low = 0;
     let mut high = nums.len() as i32 - 1;
-
 
     while low <= high {
         let mid = (high - low) / 2 + low;
 
         if target == nums[mid as usize] {
-            return mid
+            return mid;
         } else if target < nums[mid as usize] {
             high = mid - 1
         } else {
             low = mid + 1
         }
-    }    
+    }
     -1
 }
 
@@ -25,17 +24,17 @@ pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
         let mid = (high - low) / 2 + low;
         let end = matrix[mid as usize].len() - 1;
 
-        if target < matrix[mid as usize][0] { 
+        if target < matrix[mid as usize][0] {
             high = mid - 1;
         } else if target > matrix[mid as usize][end] {
             low = mid + 1;
         } else {
             match binary_search(&matrix[mid as usize], target) {
                 -1 => return false,
-                _ => return true
-            };           
+                _ => return true,
+            };
         }
-    };
+    }
     false
 }
 //
@@ -56,7 +55,7 @@ pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
     let mut right: i32 = *piles.iter().max().unwrap();
     let mut left: i32 = 1;
     let mut solution = right;
-    
+
     while left <= right {
         let mid = (left + right) / 2;
         let hours: i64 = piles.iter().fold(0, |acc, pile| acc + div_ceil(pile, mid));
@@ -68,9 +67,9 @@ pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
             left = mid + 1
         }
     }
-    return solution
+    return solution;
     // match solutions.partition_point(|&num| banana_check(&piles, num, h)) {
-    //     i if i == solutions.len() => max, 
+    //     i if i == solutions.len() => max,
     //     i => solutions[i]
     // }
 }
@@ -85,11 +84,11 @@ pub fn div_ceil(divd: &i32, div: i32) -> i64 {
     if divd % div != 0 {
         solution += 1
     };
-    return solution.into()
+    return solution.into();
 }
 
 pub fn find_min(nums: Vec<i32>) -> i32 {
-    let mut left = 0;    
+    let mut left = 0;
     let mut right = nums.len() - 1;
     while left <= right {
         let mid = (right + left) / 2;
@@ -99,7 +98,36 @@ pub fn find_min(nums: Vec<i32>) -> i32 {
             left = mid + 1
         }
     }
-    return nums[right]
+    return nums[right];
+}
+
+fn search_rotated(nums: Vec<i32>, target: i32) -> i32 {
+     //[4, 5, 1, 2, 3]
+     //[0, 1, 2, 3, 4]
+     //[4, 5, 6, 7, 0, 1, 2];
+     //[2, 4, 5, 6, 7, 0, 1];
+     //[7, 0, 1, 2, 4, 5, 6];
+    let mut left = 0;
+    let mut right = nums.len() as i32 - 1;
+    while left <= right {
+        let mid = (right + left) / 2;
+        if nums[mid as usize] == target {
+            return mid;
+        } else if nums[mid as usize] > nums[right as usize]{
+            if target > nums[right as usize] && target < nums[mid as usize] {
+                right = mid - 1
+            } else {
+                left = mid + 1
+            }
+        } else if target > nums[mid as usize] && target > nums[right as usize]{
+            right = mid
+        } else if target < nums[mid as usize] {
+            right = mid - 1
+        } else {
+            left = mid + 1
+        }
+    }
+    return -1;
 }
 
 #[cfg(test)]
@@ -108,7 +136,7 @@ mod tests {
 
     #[test]
     fn binary_search_test() {
-        let nums = vec![-1,0,3,5,9,12];
+        let nums = vec![-1, 0, 3, 5, 9, 12];
         assert_eq!(binary_search(&nums, 2), -1);
     }
 
@@ -120,19 +148,19 @@ mod tests {
 
     #[test]
     fn search_matrix_test() {
-        let nums = vec![vec![1,3,5,7],vec![10,11,16,20],vec![23,30,34,60]];
+        let nums = vec![vec![1, 3, 5, 7], vec![10, 11, 16, 20], vec![23, 30, 34, 60]];
         assert_eq!(search_matrix(nums, 3), true)
     }
-    
+
     #[test]
     fn search_matrix_test_one_true() {
-        let nums = vec![vec![1]]; 
+        let nums = vec![vec![1]];
         assert_eq!(search_matrix(nums, 1), true)
     }
 
     #[test]
     fn search_matrix_test_one_false() {
-        let nums = vec![vec![1]]; 
+        let nums = vec![vec![1]];
         assert_eq!(search_matrix(nums, 0), false)
     }
 
@@ -149,13 +177,24 @@ mod tests {
     }
     #[test]
     fn koko_three() {
-        let piles = vec![805306368,805306368,805306368];
+        let piles = vec![805306368, 805306368, 805306368];
         assert_eq!(3, min_eating_speed(piles, 1000000000))
     }
     #[test]
-    fn rotated_test() {
+    fn rotated_min_test() {
         let nums = vec![4, 5, 1, 2, 3];
         assert_eq!(1, find_min(nums))
     }
 
+    #[test]
+    fn rotated_test() {
+        let nums = vec![4,5,6,7,0,1,2];
+        assert_eq!(-1, search_rotated(nums, 3))
+    }
+
+    #[test]
+    fn rotated_not_found_test() {
+        let nums = vec![4, 5, 1, 2, 3];
+        assert_eq!(-1, search_rotated(nums, 6))
+    }
 }
