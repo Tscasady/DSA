@@ -27,43 +27,27 @@ pub fn reverse_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
 }
 
 pub fn merge_two_lists(
-    mut list1: Option<Box<ListNode>>,
-    mut list2: Option<Box<ListNode>>,
+    list1: Option<Box<ListNode>>,
+    list2: Option<Box<ListNode>>,
 ) -> Option<Box<ListNode>> {
-
-    let mut new_node;
-    match mem::replace(&mut list1, None) {
-        Some(list1_node) => {
-            match mem::replace(&mut list2, None) {
-                Some(list2_node) => {
-                    if list1_node.val <= list2_node.val {
-                        new_node = ListNode::new(list1_node.val);
-                        new_node.next = merge_two_lists(list1_node.next, list2)
-                    } else {
-                        new_node = ListNode::new(list2_node.val);
-                        new_node.next = merge_two_lists(list1, list2_node.next)
-                    }
-                },
-                None => {
-                    new_node = ListNode::new(list1_node.val);
-                    new_node.next = merge_two_lists(list1_node.next, list2)
-                }
-            }
-        },
-        None => {
-            println!("{:?}", list2);
-            match mem::replace(&mut list2, None) {
-                Some(list2_node) => {
-                    new_node = ListNode::new(list2_node.val);
-                    new_node.next = merge_two_lists(list1, list2_node.next)
-                },
-                None => {
-                    return None
-                }
+    match (list1, list2) {
+        (None, None) => None,
+        (Some(list1_node), None) => return Some(list1_node),
+        (None, Some(list2_node)) => return Some(list2_node),
+        (Some(list1_node), Some(list2_node)) => {
+            if list1_node.val < list2_node.val {
+                return Some(Box::new(ListNode {
+                    val: list1_node.val,
+                    next: merge_two_lists(list1_node.next, Some(list2_node)),
+                }));
+            } else {
+                return Some(Box::new(ListNode {
+                    val: list2_node.val,
+                    next: merge_two_lists(Some(list1_node), list2_node.next),
+                }));
             }
         }
     }
-    Some(Box::new(new_node))
 }
 
 #[cfg(test)]
