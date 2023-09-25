@@ -13,7 +13,7 @@ impl ListNode {
     }
 }
 
-pub fn reverse_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+pub fn reverse_list(mut head: &mut Option<Box<ListNode>>) -> Option<Box<ListNode>> {
     let mut prev = None;
 
     while let Some(curr) = head {
@@ -21,7 +21,7 @@ pub fn reverse_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
             next: prev,
             val: curr.val,
         }));
-        head = curr.next
+        head = &mut curr.next
     }
     prev
 }
@@ -50,6 +50,17 @@ pub fn merge_two_lists(
     }
 }
 
+pub fn reorder_list(mut head: &mut Option<Box<ListNode>>) {
+
+    //split the list at the midpoint using s/f pointers
+        
+
+    let end = while let Some(node) = head {
+        head = &mut node.next
+    };
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -73,5 +84,15 @@ mod tests {
         let list1 = None;
         let list2 = None;
         assert!(merge_two_lists(list1, list2).is_none())
+    }
+    
+    #[test]
+    fn reorder_list_test() {
+        let mut list = Some(Box::new(ListNode::new(1)));
+        if let Some(ref mut node) = list {
+            node.next = Some(Box::new(ListNode::new(2)))
+        };
+        reorder_list(&mut list);
+        assert_eq!(list.unwrap().as_ref().val, 1);
     }
 }
