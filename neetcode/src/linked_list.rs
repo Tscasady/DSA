@@ -26,6 +26,20 @@ pub fn reverse_list(mut head: &mut Option<Box<ListNode>>) -> Option<Box<ListNode
     prev
 }
 
+pub fn append(mut head: Option<Box<ListNode>>, elem: i32) -> Option<Box<ListNode>> {
+    let mut elem = ListNode::new(elem);
+    match head {
+        Some(node) => {
+            elem.next = head;
+            Some(Box::new(elem))
+        },
+        None => {
+            head = Some(Box::new(elem));
+            head
+        }
+    }
+}
+
 pub fn merge_two_lists(
     list1: Option<Box<ListNode>>,
     list2: Option<Box<ListNode>>,
@@ -53,12 +67,46 @@ pub fn merge_two_lists(
 pub fn reorder_list(mut head: &mut Option<Box<ListNode>>) {
 
     //split the list at the midpoint using s/f pointers
+    //is this really needed? the operations of iterating through the list and counting and dividing
+    //and walking through again seems similar 
         
 
     let end = while let Some(node) = head {
         head = &mut node.next
     };
+}
 
+pub fn remove_at(head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
+    let count = 1;
+    let mut prev = None;
+    let mut curr = head.clone();
+    while count < n {
+        while let Some(node) = curr {
+            prev = curr; //why does this work? shouldn't this move curr?
+            curr = node.next; // maybe if we tried to do something other than reassign curr here it
+            // would err
+            count += 1
+        }
+    }
+    match prev {
+        Some(mut node) => {
+            match curr {
+                Some(thing) => node.next = thing.next,
+                None => node.next = None
+            }
+        },
+        None => {
+            head = head.next
+        }
+    }
+    head
+}
+
+pub fn remove_nth_from_end(mut head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
+    //solution 1: reverse, remove, reverse again
+    reverse_list(&mut head);
+    remove_at(head, n);
+    reverse_list(&mut head)
 }
 
 #[cfg(test)]
@@ -94,5 +142,16 @@ mod tests {
         };
         reorder_list(&mut list);
         assert_eq!(list.unwrap().as_ref().val, 1);
+    }
+
+    #[test]
+    fn remove_at_test() {
+        let mut list = Some(Box::new(ListNode::new(1)));
+        append(list, 2);
+        append(list, 3);
+        remove_at(list, 1);
+        assert_eq!(list.unwrap().val, 3);
+        assert_eq!(list.unwrap().next.unwrap().val, 2);
+        assert!(list.unwrap().next.unwrap().next.is_none())
     }
 }
