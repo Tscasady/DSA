@@ -38,6 +38,34 @@ pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     total
 }
 
+pub fn diameter_of_binary_tree(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    let mut diameter = 0;
+    if let Some(node) = root {
+        let left = node.borrow().left.clone();
+        let left_height = node_diameter(left, &mut diameter);
+        let right = node.borrow().right.clone();
+        let right_height = node_diameter(right, &mut diameter);
+        let height = 1 + std::cmp::max(left_height, right_height);
+        diameter = std::cmp::max(left_height + right_height + 2, diameter);
+    }
+    diameter
+}
+
+pub fn node_diameter(root: Option<Rc<RefCell<TreeNode>>>, diameter: &mut i32) -> i32 {
+    match root {
+        Some(node) => {
+            let left = node.borrow().left.clone();
+            let left_depth = node_diameter(left, diameter);
+            let right = node.borrow().right.clone();
+            let right_depth = node_diameter(right, diameter);
+            let depth = 1 + std::cmp::max(left_depth, right_depth);
+            *diameter = std::cmp::max(left_depth + right_depth + 2, *diameter);
+            depth
+        },
+        None => -1
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
