@@ -66,6 +66,23 @@ pub fn node_diameter(root: Option<Rc<RefCell<TreeNode>>>, diameter: &mut i32) ->
     }
 }
 
+pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    match (p,q) {
+        (Some(p_node), Some(q_node)) => {
+            if p_node.borrow().val == q_node.borrow().val {
+                println!("{}, {}", p_node.borrow().val, q_node.borrow().val);
+                is_same_tree(p_node.borrow().left.clone(), q_node.borrow().left.clone()) && is_same_tree(p_node.borrow().right.clone(), q_node.borrow().right.clone())
+            } else {
+                false
+            }
+        },
+        (None, None) => {
+            true
+        },
+        _ => false
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -91,5 +108,23 @@ mod tests {
         }
 
         assert_eq!(max_depth(tree), 2);
+    }
+
+    #[test]
+    fn is_same_tree_test() {
+        let tree = Some(Rc::new(RefCell::new(TreeNode::new(2))));
+        if let Some(ref binary_tree) = tree {
+            binary_tree.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(3))));
+            binary_tree.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(1))));
+        }
+
+        let tree2 = Some(Rc::new(RefCell::new(TreeNode::new(2))));
+        if let Some(ref binary_tree) = tree2 {
+            binary_tree.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(3))));
+            binary_tree.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(1))));
+        }
+
+        assert!(is_same_tree(tree, tree2))
+
     }
 }
