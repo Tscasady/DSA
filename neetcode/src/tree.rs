@@ -33,7 +33,10 @@ pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     let mut total = 0;
     if let Some(ref node) = root {
         total += 1;
-        total += std::cmp::max(max_depth(node.borrow().left.clone()), max_depth(node.borrow().right.clone()))
+        total += std::cmp::max(
+            max_depth(node.borrow().left.clone()),
+            max_depth(node.borrow().right.clone()),
+        )
     }
     total
 }
@@ -61,26 +64,70 @@ pub fn node_diameter(root: Option<Rc<RefCell<TreeNode>>>, diameter: &mut i32) ->
             let depth = 1 + std::cmp::max(left_depth, right_depth);
             *diameter = std::cmp::max(left_depth + right_depth + 2, *diameter);
             depth
-        },
-        None => -1
+        }
+        None => -1,
     }
 }
 
 pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
-    match (p,q) {
+    match (p, q) {
         (Some(p_node), Some(q_node)) => {
             if p_node.borrow().val == q_node.borrow().val {
-                println!("{}, {}", p_node.borrow().val, q_node.borrow().val);
-                is_same_tree(p_node.borrow().left.clone(), q_node.borrow().left.clone()) && is_same_tree(p_node.borrow().right.clone(), q_node.borrow().right.clone())
+                is_same_tree(p_node.borrow().left.clone(), q_node.borrow().left.clone())
+                    && is_same_tree(p_node.borrow().right.clone(), q_node.borrow().right.clone())
+            } else {
+                false
+            }
+        }
+        (None, None) => true,
+        _ => false,
+    }
+}
+
+pub fn is_subtree(
+    root: Option<Rc<RefCell<TreeNode>>>,
+    sub_root: Option<Rc<RefCell<TreeNode>>>,
+) -> bool {
+    match (root.clone(), sub_root.clone()) {
+        (Some(node), Some(sub_node)) if node.borrow().val == sub_node.borrow().val => {
+            if is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone()) && is_subtree_check(node.borrow().right.clone(), sub_node.borrow().right.clone()) {
+                return true
+            }
+        },
+        _ => {}
+    }
+
+    if let Some(node) = root {
+        return is_subtree(node.borrow().left.clone(), sub_root.clone()) || is_subtree(node.borrow().right.clone(), sub_root.clone())
+    }
+
+    false
+
+}
+
+pub fn is_subtree_check(
+    root: Option<Rc<RefCell<TreeNode>>>,
+    sub_root: Option<Rc<RefCell<TreeNode>>>,
+) -> bool {
+    match (root, sub_root) {
+        (Some(node), Some(sub_node)) => {
+            if node.borrow().val == sub_node.borrow().val {
+                is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone()) && is_subtree_check(node.borrow().right.clone(), sub_node.borrow().right.clone())
             } else {
                 false
             }
         },
-        (None, None) => {
-            true
-        },
+        (None, None) => true,
         _ => false
     }
+}
+
+pub fn lowest_common_ancestor(
+    root: Option<Rc<RefCell<TreeNode>>>,
+    p: Option<Rc<RefCell<TreeNode>>>,
+    q: Option<Rc<RefCell<TreeNode>>>,
+) -> Option<Rc<RefCell<TreeNode>>> {
+    todo!()
 }
 
 #[cfg(test)]
@@ -95,8 +142,30 @@ mod tests {
             binary_tree.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(1))));
         }
         let inverted_tree = invert_tree(tree);
-        assert_eq!(inverted_tree.as_ref().unwrap().borrow().left.as_ref().unwrap().borrow().val, 1);
-        assert_eq!(inverted_tree.as_ref().unwrap().borrow().right.as_ref().unwrap().borrow().val, 3);
+        assert_eq!(
+            inverted_tree
+                .as_ref()
+                .unwrap()
+                .borrow()
+                .left
+                .as_ref()
+                .unwrap()
+                .borrow()
+                .val,
+            1
+        );
+        assert_eq!(
+            inverted_tree
+                .as_ref()
+                .unwrap()
+                .borrow()
+                .right
+                .as_ref()
+                .unwrap()
+                .borrow()
+                .val,
+            3
+        );
     }
 
     #[test]
@@ -125,6 +194,5 @@ mod tests {
         }
 
         assert!(is_same_tree(tree, tree2))
-
     }
 }
