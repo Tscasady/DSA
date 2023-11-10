@@ -8,6 +8,8 @@ pub struct TreeNode {
     pub right: Option<Rc<RefCell<TreeNode>>>,
 }
 
+type Node = Option<Rc<RefCell<TreeNode>>>;
+
 impl TreeNode {
     #[inline]
     pub fn new(val: i32) -> Self {
@@ -90,19 +92,21 @@ pub fn is_subtree(
 ) -> bool {
     match (root.clone(), sub_root.clone()) {
         (Some(node), Some(sub_node)) if node.borrow().val == sub_node.borrow().val => {
-            if is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone()) && is_subtree_check(node.borrow().right.clone(), sub_node.borrow().right.clone()) {
-                return true
+            if is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone())
+                && is_subtree_check(node.borrow().right.clone(), sub_node.borrow().right.clone())
+            {
+                return true;
             }
-        },
+        }
         _ => {}
     }
 
     if let Some(node) = root {
-        return is_subtree(node.borrow().left.clone(), sub_root.clone()) || is_subtree(node.borrow().right.clone(), sub_root.clone())
+        return is_subtree(node.borrow().left.clone(), sub_root.clone())
+            || is_subtree(node.borrow().right.clone(), sub_root.clone());
     }
 
     false
-
 }
 
 pub fn is_subtree_check(
@@ -112,13 +116,17 @@ pub fn is_subtree_check(
     match (root, sub_root) {
         (Some(node), Some(sub_node)) => {
             if node.borrow().val == sub_node.borrow().val {
-                is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone()) && is_subtree_check(node.borrow().right.clone(), sub_node.borrow().right.clone())
+                is_subtree_check(node.borrow().left.clone(), sub_node.borrow().left.clone())
+                    && is_subtree_check(
+                        node.borrow().right.clone(),
+                        sub_node.borrow().right.clone(),
+                    )
             } else {
                 false
             }
-        },
+        }
         (None, None) => true,
-        _ => false
+        _ => false,
     }
 }
 
@@ -127,7 +135,39 @@ pub fn lowest_common_ancestor(
     p: Option<Rc<RefCell<TreeNode>>>,
     q: Option<Rc<RefCell<TreeNode>>>,
 ) -> Option<Rc<RefCell<TreeNode>>> {
-    todo!()
+    match root {
+        Some(node) => {
+            let (left, right) = (
+                lowest_common_ancestor(node.borrow().left.clone(), p.clone(), q.clone()),
+                lowest_common_ancestor(node.borrow().right.clone(), p.clone(), q.clone()),
+            );
+            match (left, right) {
+                (Some(_), Some(_)) => return Some(node),
+                (Some(left_node), None) => {
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
+                        return Some(node)
+                    } else {
+                        return Some(left_node)
+                    }
+                },
+                (None, Some(right_node)) => {
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
+                        return Some(node)
+                    } else {
+                        return Some(right_node)
+                    }
+                },
+                (None, None) => {
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
+                        return Some(node)
+                    } else {
+                        return None
+                    }
+                },
+            }
+        }
+        None => None,
+    }
 }
 
 #[cfg(test)]
