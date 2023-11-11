@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::collections::VecDeque;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -169,6 +170,37 @@ pub fn lowest_common_ancestor(
         None => None,
     }
 }
+
+pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+    let mut solution = vec![];
+    let mut queue = VecDeque::new();
+    let mut next_level = VecDeque::new();
+    queue.push_back(root);
+    loop {
+        let mut level_values = Vec::new();
+        while let Some(node) = queue.pop_front().flatten() {
+            level_values.push(node.borrow().val);
+            next_level.push_back(node.borrow().left.clone());
+            next_level.push_back(node.borrow().right.clone())
+        } 
+        if next_level.is_empty() {
+            if !level_values.is_empty() {
+                solution.push(std::mem::take(&mut level_values))
+            }
+            break;
+        } else {
+            queue = std::mem::take(&mut next_level);
+            solution.push(std::mem::take(&mut level_values))
+        }
+    }
+    solution
+}
+
+// pub fn level_values(queue: Vec<Option<Rc<RefCell<TreeNode>>>>, solution: Vec<Vec<i32>>) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
+//         
+// } 
+
+
 
 #[cfg(test)]
 mod tests {
