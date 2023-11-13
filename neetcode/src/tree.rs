@@ -1,6 +1,6 @@
 use std::cell::RefCell;
-use std::rc::Rc;
 use std::collections::VecDeque;
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -145,26 +145,32 @@ pub fn lowest_common_ancestor(
             match (left, right) {
                 (Some(_), Some(_)) => return Some(node),
                 (Some(left_node), None) => {
-                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
-                        return Some(node)
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val
+                        || node.borrow().val == q.as_ref().unwrap().borrow().val
+                    {
+                        return Some(node);
                     } else {
-                        return Some(left_node)
+                        return Some(left_node);
                     }
-                },
+                }
                 (None, Some(right_node)) => {
-                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
-                        return Some(node)
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val
+                        || node.borrow().val == q.as_ref().unwrap().borrow().val
+                    {
+                        return Some(node);
                     } else {
-                        return Some(right_node)
+                        return Some(right_node);
                     }
-                },
+                }
                 (None, None) => {
-                    if node.borrow().val == p.as_ref().unwrap().borrow().val || node.borrow().val == q.as_ref().unwrap().borrow().val {
-                        return Some(node)
+                    if node.borrow().val == p.as_ref().unwrap().borrow().val
+                        || node.borrow().val == q.as_ref().unwrap().borrow().val
+                    {
+                        return Some(node);
                     } else {
-                        return None
+                        return None;
                     }
-                },
+                }
             }
         }
         None => None,
@@ -182,7 +188,7 @@ pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
             level_values.push(node.borrow().val);
             next_level.push_back(node.borrow().left.clone());
             next_level.push_back(node.borrow().right.clone())
-        } 
+        }
         if next_level.is_empty() {
             if !level_values.is_empty() {
                 solution.push(std::mem::take(&mut level_values))
@@ -196,11 +202,26 @@ pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
     solution
 }
 
-// pub fn level_values(queue: Vec<Option<Rc<RefCell<TreeNode>>>>, solution: Vec<Vec<i32>>) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
-//         
-// } 
+pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    let mut max = root.as_ref().unwrap().borrow().val;
+    good_nodes_recursion(root, max)
+}
 
-
+pub fn good_nodes_recursion(root: Option<Rc<RefCell<TreeNode>>>, max: i32) -> i32 {
+    match root {
+        Some(node) => {
+            if node.borrow().val < max {
+                good_nodes_recursion(node.borrow().left.clone(), max)
+                    + good_nodes_recursion(node.borrow().right.clone(), max)
+            } else {
+                let max = node.borrow().val;
+                1 + good_nodes_recursion(node.borrow().left.clone(), max)
+                    + good_nodes_recursion(node.borrow().right.clone(), max)
+            }
+        }
+        None => 0,
+    }
+}
 
 #[cfg(test)]
 mod tests {
