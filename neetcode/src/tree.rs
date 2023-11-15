@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
+use std::cmp::{min, max};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -224,34 +225,19 @@ pub fn good_nodes_recursion(root: Option<Rc<RefCell<TreeNode>>>, max: i32) -> i3
 }
 
 pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-    match root {
-        Some(node) => {
-            let left = is_valid_bst_recursion(node.borrow().left.clone());
-            let right = is_valid_bst_recursion(node.borrow().right.clone());
-            if left.0 && right.0 {
-                node.borrow().val > left.2 && node.borrow().val < right.1
-            } else { false }
-        }
-        None => true,
-    }
+    is_valid_bst_recursion(root, i64::MIN, i64::MAX)
 }
 
-pub fn is_valid_bst_recursion(root: Option<Rc<RefCell<TreeNode>>>) -> (bool, i32, i32) {
+pub fn is_valid_bst_recursion(root: Option<Rc<RefCell<TreeNode>>>, min: i64, max: i64) -> bool {
     match root {
         Some(node) => {
-            let left = is_valid_bst_recursion(node.borrow().left.clone());
-            let right = is_valid_bst_recursion(node.borrow().right.clone());
-            if left.0 && right.0 {
-                if node.borrow().val < right.1 && node.borrow().val > left.2 {
-                    return (true, std::cmp::min(left.1, node.borrow().val), std::cmp::max(right.2, node.borrow().val))
-                } else { return (false, 0, 0) }
-            }
-
-            return (false, 0, 0)
+            if (node.borrow().val as i64) > min && (node.borrow().val as i64) < max {
+                is_valid_bst_recursion(node.borrow().left.clone(), min, node.borrow().val as i64) && 
+                    is_valid_bst_recursion(node.borrow().right.clone(), node.borrow().val as i64, max) 
+            } else { false }
         },
         None => {
-            //values are based on arbitrary leetcode constraints, replace with Option<i32> logic
-            (true, 2147483647, -2147483648)
+            true
         }
     }
 }
