@@ -242,6 +242,29 @@ pub fn is_valid_bst_recursion(root: Option<Rc<RefCell<TreeNode>>>, min: i64, max
     }
 }
 
+pub fn kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, k: i32) -> i32 {
+    let (value, _) = kth_recursion(root, k, 0);
+    return value.unwrap()
+}
+
+pub fn kth_recursion(root: Option<Rc<RefCell<TreeNode>>>, k: i32, mut count: i32) -> (Option<i32>, i32) {
+    match root {
+        Some(node) => {
+            let (value, count) = kth_recursion(node.borrow().left.clone(), k, count);
+            if value.is_some() {
+                return (value, count)
+            }
+
+            if count + 1 == k {
+                return (Some(node.borrow().val), 0)
+            }
+
+            return kth_recursion(node.borrow().right, k, count + 1);
+        },
+        None => { (None, count) }
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
