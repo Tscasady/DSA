@@ -226,11 +226,11 @@ pub fn good_nodes_recursion(root: Option<Rc<RefCell<TreeNode>>>, max: i32) -> i3
 pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     match root {
         Some(node) => {
-            let left = is_valid_bst_recursion(node.borrow().left);
-            let right = is_valid_bst_recursion(node.borrow().right);
+            let left = is_valid_bst_recursion(node.borrow().left.clone());
+            let right = is_valid_bst_recursion(node.borrow().right.clone());
             if left.0 && right.0 {
                 node.borrow().val > left.2 && node.borrow().val < right.1
-            }
+            } else { false }
         }
         None => true,
     }
@@ -239,28 +239,21 @@ pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 pub fn is_valid_bst_recursion(root: Option<Rc<RefCell<TreeNode>>>) -> (bool, i32, i32) {
     match root {
         Some(node) => {
-            let left = is_valid_bst_recursion(node.borrow().left);
-            if left.0 {
-                if node.borrow().val > left.2 {
-                    return (true, std::cmp::min(left.1, node.borrow().val), std::cmp::max(left.2, node.borrow().val))
+            let left = is_valid_bst_recursion(node.borrow().left.clone());
+            let right = is_valid_bst_recursion(node.borrow().right.clone());
+            if left.0 && right.0 {
+                if node.borrow().val < right.1 && node.borrow().val > left.2 {
+                    return (true, std::cmp::min(left.1, node.borrow().val), std::cmp::max(right.2, node.borrow().val))
                 } else { return (false, 0, 0) }
-            }
-
-            let right = is_valid_bst_recursion(node.borrow().right);
-            if right.0 {
-                if node.borrow().val < right.1 {
-                    return (true, std::cmp::min(right.1, node.borrow().val), std::cmp::max(right.2, node.borrow().val))
-                }
             }
 
             return (false, 0, 0)
         },
         None => {
-            (true, 0, 0)
+            //values are based on arbitrary leetcode constraints, replace with Option<i32> logic
+            (true, 2147483647, -2147483648)
         }
     }
-
-
 }
 
 
